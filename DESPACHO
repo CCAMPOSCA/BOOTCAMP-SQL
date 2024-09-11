@@ -1,1 +1,73 @@
-CREAR BASE DE DATOS
+-- Crear la base de datos
+CREATE DATABASE dsrp_Gestion_Inventario_Despacho;
+GO
+USE dsrp_Gestion_Inventario_Despacho;
+GO
+
+-- Crear tabla de cliente
+CREATE TABLE Cliente (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  numero_documento VARCHAR(15) UNIQUE NOT NULL,
+  nombres VARCHAR(255) NOT NULL,
+  direccion NVARCHAR(1000) NOT NULL,
+  celular VARCHAR(15) NOT NULL,
+  email VARCHAR(255) NOT NULL
+);
+GO
+
+
+-- Crear tabla de proveedores
+CREATE TABLE proveedor (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  numero_documento VARCHAR(20) UNIQUE NOT NULL,
+  razon_social VARCHAR(255) NOT NULL,
+  domicilio_fiscal NVARCHAR(1000) NOT NULL,
+  telefono VARCHAR(15) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  fecha_registro DATETIME DEFAULT GETDATE() NOT NULL
+);
+GO
+
+-- Crear tabla de productos
+CREATE TABLE producto (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  producto VARCHAR(155) UNIQUE NOT NULL,
+  sku VARCHAR(155) UNIQUE NOT NULL
+);
+GO
+
+-- Crear tabla de stock
+CREATE TABLE stock (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  producto_id INT NOT NULL,
+  descripcion VARCHAR(500),
+  stock INT NOT NULL,
+  FOREIGN KEY (producto_id) REFERENCES producto(id)
+);
+GO
+
+-- Crear tabla de órdenes de compra
+CREATE TABLE orden_compra (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  proveedor_id INT NOT NULL,
+  producto_id INT NOT NULL,
+  fecha_emision DATETIME DEFAULT GETDATE() NOT NULL,
+  cantidad INT NOT NULL,
+  descripcion VARCHAR(500) NOT NULL,
+  FOREIGN KEY (proveedor_id) REFERENCES proveedor(id),
+  FOREIGN KEY (producto_id) REFERENCES producto(id)
+);
+GO
+
+-- Crear tabla de órdenes de despacho
+CREATE TABLE orden_despacho (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  cliente_id INT NOT NULL,
+  producto_id INT NOT NULL,
+  fecha_emision DATETIME DEFAULT GETDATE() NOT NULL,
+  cantidad INT NOT NULL,
+  descripcion VARCHAR(500) NOT NULL,
+  FOREIGN KEY (cliente_id) REFERENCES cliente(id),
+  FOREIGN KEY (producto_id) REFERENCES producto(id)
+);
+GO
