@@ -36,6 +36,11 @@ CREATE TABLE producto (
 );
 GO
 
+ALTER TABLE producto
+ADD proveedor_id INT NOT NULL,
+FOREIGN KEY (proveedor_id) REFERENCES proveedor(id);
+
+
 -- Crear tabla de stock
 CREATE TABLE stock (
   id INT PRIMARY KEY IDENTITY(1,1),
