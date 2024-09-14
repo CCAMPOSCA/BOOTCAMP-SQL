@@ -1,0 +1,138 @@
+USE dsrp_Gestion_Inventario_Despacho;
+GO
+
+INSERT INTO Cliente (numero_documento, nombres, direccion, celular, email)
+VALUES
+('10000001', 'Juan Lopez', 'Av. Libertad 101', '987654321', 'juan.lopez1@gmail.com'),
+('10000002', 'Maria Gomez', 'Jr. La Paz 202', '987654322', 'maria.gomez@gmail.com'),
+('10000003', 'Luis Diaz', 'Calle Las Flores 303', '987654323', 'luis.diaz@gmail.com'),
+('10000050', 'Carmen Sosa', 'Av. 28 de Julio 550', '987654370', 'carmen.sosa50@gmail.com');
+
+INSERT INTO Cliente (numero_documento, nombres, direccion, celular, email)
+VALUES
+('10000004', 'Juan Jimenez', 'Av. lurigancho 101', '987654324', ''),
+('10000005', 'Pedro Gomez', 'Jr. Junin 202', '987654325', ''),
+('10000006', 'Luis Sanchez', 'Calle Las Dalias 303', '987654326', ''),
+('10000007', 'Carmen Leticia', 'Av. 28 de Julio 701', '987654327', '');
+
+UPDATE Cliente
+SET email = CONCAT(REPLACE(nombres, ' ', ''), '@gmail.com');
+
+
+
+INSERT INTO proveedor (numero_documento, razon_social, domicilio_fiscal, telefono, email)
+VALUES
+('20000000001', 'Proveedor 1 S.A.', 'Calle Comercio 101', '012345671', 'proveedor1@empresa.com'),
+('20000000002', 'Proveedor 2 S.A.', 'Av. Industrial 202', '012345672', 'proveedor2@empresa.com'),
+('20000000003', 'Proveedor 3 S.A.', 'Jr. Los Andes 303', '012345673', 'proveedor3@empresa.com'),
+('20000000050', 'Proveedor 50 S.A.', 'Av. Las Palmeras 550', '012345720', 'proveedor50@empresa.com');
+
+INSERT INTO proveedor (numero_documento, razon_social, domicilio_fiscal, telefono, email)
+VALUES
+('20000000004', 'Proveedor 4 S.A.', 'Calle Comercio 104', '012345674', '');
+UPDATE proveedor
+SET email = CONCAT(REPLACE(REPLACE(razon_social, ' ', ''),'S.A.',''), '@gmail.com');
+
+INSERT INTO producto (producto, sku,proveedor_id)
+VALUES
+('Producto 1', 'SKU001', 1),
+('Producto 2', 'SKU002', 2),
+('Producto 3', 'SKU003', 1),
+('Producto 4', 'SKU050', 3);
+
+INSERT INTO producto (producto, sku,proveedor_id)
+VALUES
+('Producto 5', 'SKU005', 3),
+('Producto 6', 'SKU006', 4),
+('Producto 7', 'SKU007', 2),
+('Producto 8', 'SKU008', 3),
+('Producto 9', 'SKU009', 1),
+('Producto 10', 'SKU0010', 4),
+('Producto 11', 'SKU0011', 1),
+('Producto 12', 'SKU0012', 3),
+('Producto 13', 'SKU0013', 2),
+('Producto 14', 'SKU0014', 4),
+('Producto 15', 'SKU0015', 3);
+
+INSERT INTO stock (producto_id, descripcion, stock)
+VALUES
+(1, 'Producto 1 descripción', 100),
+(2, 'Producto 2 descripción', 150),
+(3, 'Producto 3 descripción', 200),
+(4, 'Producto 4 descripción', 300);
+
+INSERT INTO orden_compra (producto_id, cantidad, descripcion,numero_OC)
+VALUES
+(1, 10, 'Compra de 10 unidades de Producto 1','OC-001'),
+(2, 20, 'Compra de 20 unidades de Producto 2','OC-002'),
+(3, 30, 'Compra de 30 unidades de Producto 3','OC-003'),
+(4, 100, 'Compra de 100 unidades de Producto 4','OC-004'),
+(16, 50, 'Compra de 50 unidades de Producto 15','OC-005'),
+(6, 60, 'Compra de 60 unidades de Producto 5','OC-006'),
+(7, 50, 'Compra de 50 unidades de Producto 6','OC-007'),
+(8, 70, 'Compra de 70 unidades de Producto 7','OC-008'),
+(9, 10, 'Compra de 10 unidades de Producto 8','OC-009'),
+(10, 20, 'Compra de 20 unidades de Producto 9','OC-010'),
+(11, 30, 'Compra de 30 unidades de Producto 10','OC-011'),
+(12, 100, 'Compra de 100 unidades de Producto 11','OC-012'),
+(13, 50, 'Compra de 50 unidades de Producto 12','OC-013'),
+(14, 60, 'Compra de 60 unidades de Producto 13','OC-014'),
+(15, 50, 'Compra de 50 unidades de Producto 14','OC-015');
+
+
+
+
+INSERT INTO orden_despacho (cliente_id, producto_id, cantidad, descripcion,numero_OD)
+VALUES
+(1, 1, 5, 'Despacho de 5 unidades de Producto 1 para Cliente 1','OD-001'),
+(2, 2, 10, 'Despacho de 10 unidades de Producto 2 para Cliente 2','OD-002'),
+(3, 3, 15, 'Despacho de 15 unidades de Producto 3 para Cliente 3','OD-003'),
+(4, 4, 25, 'Despacho de 25 unidades de Producto 4 para Cliente 4','OD-004');
+
+INSERT INTO orden_despacho (cliente_id, producto_id, cantidad, descripcion,numero_OD)
+VALUES
+(8, 16, 10, 'Despacho de 5 unidades de Producto 15 para Cliente 5','OD-005'),
+(9, 6, 10, 'Despacho de 10 unidades de Producto 5 para Cliente 6','OD-006'),
+(10, 7, 20, 'Despacho de 15 unidades de Producto 6 para Cliente 7','OD-007'),
+(11, 8, 25, 'Despacho de 25 unidades de Producto 7 para Cliente 8','OD-008'),
+(8, 12, 20, 'Despacho de 15 unidades de Producto 11 para Cliente 5','OD-009'),
+(1, 14, 25, 'Despacho de 25 unidades de Producto 13 para Cliente 1','OD-0010');
+
+--Eliminar todo el contenido de una tabla reiniciando el contador
+TRUNCATE TABLE producto;
+TRUNCATE TABLE stock;
+TRUNCATE TABLE orden_compra;
+TRUNCATE TABLE orden_despacho;
+TRUNCATE TABLE proveedor;
+TRUNCATE TABLE Cliente;
+DROP TABLE orden_compra;
+
+SELECT*FROM orden_compra;
+
+SELECT*FROM proveedor;
+
+SELECT*FROM Cliente;
+
+SELECT*FROM producto;
+
+SELECT*FROM orden_despacho;
+
+SELECT*FROM stock;
+
+EXEC SP_HELP orden_compra;
+
+--campiar tipo de dato unique
+SELECT name 
+FROM sys.key_constraints 
+WHERE type = 'UQ' AND parent_object_id = OBJECT_ID('orden_compra');
+
+ALTER TABLE orden_compra
+DROP CONSTRAINT UQ__orden_co__5219D9D2E970F514;
+
+SELECT name 
+FROM sys.key_constraints 
+WHERE type = 'UQ' AND parent_object_id = OBJECT_ID('orden_despacho');
+
+ALTER TABLE orden_despacho
+DROP CONSTRAINT UQ__orden_de__5219D9D562307173;
+
