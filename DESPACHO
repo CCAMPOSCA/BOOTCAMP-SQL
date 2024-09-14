@@ -54,15 +54,17 @@ GO
 -- Crear tabla de órdenes de compra
 CREATE TABLE orden_compra (
   id INT PRIMARY KEY IDENTITY(1,1),
-  proveedor_id INT NOT NULL,
   producto_id INT NOT NULL,
   fecha_emision DATETIME DEFAULT GETDATE() NOT NULL,
   cantidad INT NOT NULL,
   descripcion VARCHAR(500) NOT NULL,
-  FOREIGN KEY (proveedor_id) REFERENCES proveedor(id),
   FOREIGN KEY (producto_id) REFERENCES producto(id)
 );
 GO
+ALTER TABLE orden_compra
+ADD numero_OC VARCHAR(20) UNIQUE NOT NULL;
+
+
 
 -- Crear tabla de órdenes de despacho
 CREATE TABLE orden_despacho (
@@ -76,3 +78,8 @@ CREATE TABLE orden_despacho (
   FOREIGN KEY (producto_id) REFERENCES producto(id)
 );
 GO
+ALTER TABLE orden_despacho
+ADD numero_OD VARCHAR(20) UNIQUE NOT NULL;
+
+
+EXEC SP_HELP orden_compra;
