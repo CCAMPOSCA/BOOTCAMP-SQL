@@ -80,8 +80,6 @@ VALUES
 (15, 50, 'Compra de 50 unidades de Producto 14','OC-015');
 
 
-
-
 INSERT INTO orden_despacho (cliente_id, producto_id, cantidad, descripcion,numero_OD)
 VALUES
 (1, 1, 5, 'Despacho de 5 unidades de Producto 1 para Cliente 1','OD-001'),
@@ -97,6 +95,42 @@ VALUES
 (11, 8, 25, 'Despacho de 25 unidades de Producto 7 para Cliente 8','OD-008'),
 (8, 12, 20, 'Despacho de 15 unidades de Producto 11 para Cliente 5','OD-009'),
 (1, 14, 25, 'Despacho de 25 unidades de Producto 13 para Cliente 1','OD-0010');
+
+--Crear Trigger orden de compra
+CREATE TRIGGER trg_update_stock_compra
+ON orden_compra
+AFTER INSERT
+AS
+BEGIN
+    MERGE stock AS target
+    USING (SELECT producto_id, cantidad FROM inserted) AS source
+    ON target.producto_id = source.producto_id
+    WHEN MATCHED THEN 
+        UPDATE SET target.stock = target.stock + source.cantidad
+    WHEN NOT MATCHED THEN
+        INSERT (producto_id,  descripcion, stock) 
+        VALUES (source.producto_id, CONCAT('producto ', source.producto_id, ' descripción'), source.cantidad);
+END;
+GO
+
+--Crear Trigger orden de despacho
+CREATE TRIGGER trg_update_stock_despacho
+ON orden_despacho
+AFTER INSERT
+AS
+BEGIN
+    MERGE stock AS target
+    USING (SELECT producto_id, cantidad FROM inserted) AS source
+    ON target.producto_id = source.producto_id
+    WHEN MATCHED THEN 
+        UPDATE SET target.stock = target.stock - source.cantidad
+    WHEN NOT MATCHED THEN
+        INSERT (producto_id, descripcion, stock) 
+        VALUES (source.producto_id,CONCAT('producto ', source.producto_id, ' descripción'), -source.cantidad);
+END;
+GO
+
+
 
 --Eliminar todo el contenido de una tabla reiniciando el contador
 TRUNCATE TABLE producto;
@@ -120,6 +154,7 @@ SELECT*FROM orden_despacho;
 SELECT*FROM stock;
 
 EXEC SP_HELP orden_compra;
+EXEC SP_HELP stock;
 
 --campiar tipo de dato unique
 SELECT name 
@@ -136,3 +171,4 @@ WHERE type = 'UQ' AND parent_object_id = OBJECT_ID('orden_despacho');
 ALTER TABLE orden_despacho
 DROP CONSTRAINT UQ__orden_de__5219D9D562307173;
 
+DROP TRIGGER trg_update_stock_despacho;
