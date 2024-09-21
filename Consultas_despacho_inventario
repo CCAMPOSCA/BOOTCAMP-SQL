@@ -1,0 +1,53 @@
+-- Ver el stock actual de todos los productos
+SELECT producto_id, descripcion, stock
+FROM stock;
+
+-- Ver las órdenes de compra realizadas
+SELECT * 
+FROM orden_compra;
+
+-- Ver las órdenes de despacho realizadas
+SELECT * 
+FROM orden_despacho;
+
+-- Obtener el total de unidades compradas por producto
+SELECT producto_id, SUM(cantidad) AS total_comprado
+FROM orden_compra
+GROUP BY producto_id;
+
+-- Obtener el total de unidades despachadas por producto
+SELECT producto_id, SUM(cantidad) AS total_despachado
+FROM orden_despacho
+GROUP BY producto_id;
+
+-- Calcular el stock actual por producto
+SELECT producto_id, SUM(stock) AS stock_actual
+FROM stock
+GROUP BY producto_id;
+
+-- Ver las órdenes de compra con detalles del producto y proveedor
+SELECT oc.numero_OC, p.producto, pr.razon_social, oc.cantidad, oc.fecha_emision
+FROM orden_compra oc
+JOIN producto p ON oc.producto_id = p.id
+JOIN proveedor pr ON p.proveedor_id = pr.id;
+
+-- Ver las órdenes de despacho con detalles del cliente y producto
+SELECT od.numero_OD, c.nombres AS cliente, p.producto, od.cantidad, od.fecha_emision
+FROM orden_despacho od
+JOIN cliente c ON od.cliente_id = c.id
+JOIN producto p ON od.producto_id = p.id;
+
+-- Ver productos que nunca han sido despachados
+SELECT p.producto
+FROM producto p
+WHERE p.id NOT IN (SELECT producto_id FROM orden_despacho);
+
+-- Ver clientes que han realizado más de una orden de despacho
+SELECT cliente_id, COUNT(*) AS total_despachos
+FROM orden_despacho
+GROUP BY cliente_id
+HAVING COUNT(*) > 1;
+
+-- Aumentar en 10 el stock de todos los productos
+UPDATE stock
+SET stock = stock + 10;
